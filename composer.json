@@ -1,0 +1,22 @@
+{
+  "name": "acr/acr_destek",
+  "description": "Destek",
+  "type": "package",
+  "license": "mit",
+  "authors": [
+    {
+      "name": "rdtvaacar",
+      "email": "acarbey15@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Acr\\Destek\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.4",
+    "illuminate/config": "~5.0"
+  }
+}
