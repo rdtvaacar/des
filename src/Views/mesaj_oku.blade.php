@@ -17,7 +17,7 @@
                 <!-- /.box-header -->
                 <div class="box-body no-padding">
                     <div class="mailbox-read-info">
-                        <h3><span style="color: #1b6cbe"><?php echo $mesaj->name = empty($mesaj->name) ? $mesaj->ad : $mesaj->name) ?></span> - <?php echo $mesaj->konu ?></h3>
+                        <h3><span style="color: #1b6cbe"><?php echo $mesaj->name = empty($mesaj->name) ? $mesaj->ad : $mesaj->name ?></span> - <?php echo $mesaj->konu ?></h3>
                         <h5><span class="mailbox-read-time pull-right"><?php echo date('d/m/Y H:i', strtotime($mesaj->du_cd)) ?></span></h5>
                     </div>
                     <!-- /.mailbox-read-info -->
@@ -39,6 +39,7 @@
                     <!-- /.mailbox-read-message -->
                 </div>
                 <!-- /.box-body -->
+                <?php if(!empty($mesaj->dosya_isim)) { ?>
                 <div class="box-footer">
 
                     <ul class="mailbox-attachments clearfix">
@@ -55,7 +56,8 @@
 
                     </ul>
                 </div>
-                <!-- /.box-footer -->
+            <?php } ?>
+            <!-- /.box-footer -->
                 <div class="box-footer">
                     <div class="pull-right">
                         <a href="/destek/yeni_mesaj?mesaj_id=<?php echo $mesaj_id ?>" class="btn btn-default"><i class="fa fa-reply"></i> Cevapla</a>
