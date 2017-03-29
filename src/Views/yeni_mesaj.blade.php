@@ -1,4 +1,5 @@
 <section class="content">
+    <?php echo empty($msg) ? '' : $msg; ?>
     <div class="row">
     <?php echo $destek->menu($tab);
     if ($mesaj_id) {

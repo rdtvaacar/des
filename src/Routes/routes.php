@@ -6,20 +6,23 @@ Route::get('/destek/{sayfa}/{yer}', function (Request $request, $sayfa, $yer) {
     $sayfa    = empty($sayfa) ? 'anasayfa' : $sayfa;
     $yer      = empty($yer) ? '' : $yer . '.';
     $mesaj_id = $request->input('mesaj_id');
-    return Destek::index($sayfa, $yer, $tab, $mesaj_id);
+    $msg      = $request->input('msg');
+    return Destek::index($sayfa, $yer, $tab, $mesaj_id, $msg);
 });
 Route::get('/destek/{sayfa}/', function (Request $request, $sayfa) {
     $tab      = $request->input('tab');
     $mesaj_id = $request->input('mesaj_id');
     $sayfa    = empty($sayfa) ? 'anasayfa' : $sayfa;
-    return Destek::index($sayfa, null, $tab, $mesaj_id);
+    $msg      = $request->input('msg');
+    return Destek::index($sayfa, null, $tab, $mesaj_id, $msg);
 });
 Route::get('/destek', function (Request $request) {
     $tab      = $request->input('tab');
     $sayfa    = 'anasayfa';
     $tab      = empty($tab) ? 'destek_gelen' : $tab;
     $mesaj_id = $request->input('mesaj_id');
-    return Destek::index($sayfa, null, $tab, $mesaj_id);
+    $msg      = $request->input('msg');
+    return Destek::index($sayfa, null, $tab, $mesaj_id, $msg);
 
 });
 

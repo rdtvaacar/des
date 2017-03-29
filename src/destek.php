@@ -12,19 +12,20 @@ use Acr\Destek\Model\Destek_model;
 class Destek extends Controller
 {
     protected $basarili           = '<div class="alert alert-success">Başarıyla Eklendi</div>';
+    protected $gonderildi         = '<div class="alert alert-success">Mesajınız başarıyla gönderildi, en kısa zamanda size yanıt vermeye çalışacağız, teşekkür ederiz.</div>';
     protected $basariliGuncelleme = '<div class="alert alert-success">Başarıyla Güncellendi</div>';
 
-    function index($sayfa, $yer, $tab, $mesaj_id)
+    function index($sayfa, $yer, $tab, $mesaj_id, $msg)
     {
         $destek = new Destek();
-        return view('acr_destek.index', compact('destek', 'sayfa', 'yer', 'tab', 'mesaj_id'));
+        return view('acr_destek.index', compact('destek', 'sayfa', 'yer', 'tab', 'mesaj_id', 'msg'));
     }
 
-    function anasayfa($sayfa, $yer, $tab, $mesaj_id)
+    function anasayfa($sayfa, $yer, $tab, $mesaj_id, $msg)
     {
         $destek = new Destek();
         $data   = new Destek_model();
-        return view('acr_destek::' . $yer . $sayfa, compact('destek', 'tab', 'data', 'mesaj_id'));
+        return view('acr_destek::' . $yer . $sayfa, compact('destek', 'tab', 'data', 'mesaj_id', 'msg'));
     }
 
     function sil($destek_id, $tab)
@@ -116,14 +117,16 @@ class Destek extends Controller
         $destek_model = new Destek_model();
         $gon_id       = $this->uye_id();
         $mesaj_id     = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
+        if (!empty($dosya)) {
+            $isim       = $dosya->getClientOriginalName();
+            $size       = round($dosya->getClientSize() / 1000000, 2);
+            $type       = strtolower($dosya->getClientOriginalExtension());
+            $dosya_isim = self::ingilizceYap($isim);
+            $dosya->move(public_path('/uploads'), $dosya_isim);
+            $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
+        }
 
-        $isim       = $dosya->getClientOriginalName();
-        $size       = round($dosya->getClientSize() / 1000000, 2);
-        $type       = strtolower($dosya->getClientOriginalExtension());
-        $dosya_isim = self::ingilizceYap($isim);
-        $dosya->move(public_path('/uploads'), $dosya_isim);
-        $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
-        return redirect()->back()->with('msg', $this->basarili);
+        return redirect()->to('destek/yeni_mesaj?msg=' . $this->gonderildi);
     }
 
     function destek_dosya_indir($destek_dosya_id)
