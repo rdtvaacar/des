@@ -82,7 +82,8 @@ class Destek extends Controller
 
     function destek_satir($item, $tab)
     {
-        $veri =
+        $item->name = empty($item->name) ? $item->ad : $item->name;
+        $veri       =
             '<tr id="destek_satir_' . $item->destek_users_id . '">
                    <td><input id="destek_id[]" name="destek_id[]" value="' . $item->destek_users_id . '"  type="checkbox"></td>
                    <td class="mailbox-name"><a href="/destek/mesaj_oku?mesaj_id=' . $item->destek_users_id . '&tab=' . $tab . '">' . $item->name . '</a></td>
