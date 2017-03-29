@@ -17,7 +17,7 @@
                 <!-- /.box-header -->
                 <div class="box-body no-padding">
                     <div class="mailbox-read-info">
-                        <h3><span style="color: #1b6cbe"><?php echo $mesaj->name ?></span> - <?php echo $mesaj->konu ?></h3>
+                        <h3><span style="color: #1b6cbe"><?php echo $mesaj->name = empty($mesaj->name) ? $mesaj->ad : $mesaj->name) ?></span> - <?php echo $mesaj->konu ?></h3>
                         <h5><span class="mailbox-read-time pull-right"><?php echo date('d/m/Y H:i', strtotime($mesaj->du_cd)) ?></span></h5>
                     </div>
                     <!-- /.mailbox-read-info -->

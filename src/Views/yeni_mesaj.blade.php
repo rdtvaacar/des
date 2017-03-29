@@ -6,7 +6,7 @@
         $konu         = 'RE: ' . $mesaj->konu;
         $mesaj_icerik = '<br><br>.............................................................. <br>Cevabı üst satıra yazınız<br>' . $mesaj->du_cd . '<br>' . $mesaj->mesaj;
         $uye_id       = $mesaj->gon_id;
-        $name         = $mesaj->name;
+        $name         = empty($mesaj->name) ? $mesaj->ad : $mesaj->name;
     } else {
         $konu         = '';
         $mesaj_icerik = '';

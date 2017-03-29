@@ -20,6 +20,7 @@ Route::get('/destek', function (Request $request) {
     $tab      = empty($tab) ? 'destek_gelen' : $tab;
     $mesaj_id = $request->input('mesaj_id');
     return Destek::index($sayfa, null, $tab, $mesaj_id);
+
 });
 
 Route::post('/destek_sec_sil', function (Request $request) {

@@ -122,6 +122,7 @@ class Destek extends Controller
         $dosya_isim = self::ingilizceYap($isim);
         $dosya->move(public_path('/uploads'), $dosya_isim);
         $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
+        return redirect()->back()->with('msg', $this->basarili);
     }
 
     function destek_dosya_indir($destek_dosya_id)
