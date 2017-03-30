@@ -7,6 +7,7 @@ use Acr\Destek\Model\Destek_dosya_model;
 use Symfony\Component\HttpFoundation\Request;
 use Acr\Destek\Controllers\Controller;
 use Acr\Destek\Model\Destek_model;
+use Acr\Destek\Controllers\MailController;
 
 
 class Destek extends Controller
@@ -114,6 +115,7 @@ class Destek extends Controller
 
     function destek_mesaj_kaydet($konu, $mesaj, $dosya, $uye_id)
     {
+        $mail         = new MailController();
         $destek_model = new Destek_model();
         $gon_id       = $this->uye_id();
         $mesaj_id     = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
@@ -125,7 +127,7 @@ class Destek extends Controller
             $dosya->move(public_path('/uploads'), $dosya_isim);
             $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
         }
-
+        $mail->build();
         return redirect()->to('destek/yeni_mesaj?msg=' . $this->gonderildi);
     }
 
