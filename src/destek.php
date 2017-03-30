@@ -4,7 +4,6 @@ namespace Acr\Destek;
 
 
 use Acr\Destek\Model\Destek_dosya_model;
-use Symfony\Component\HttpFoundation\Request;
 use Acr\Destek\Controllers\Controller;
 use Acr\Destek\Model\Destek_model;
 use Acr\Destek\Controllers\MailController;
@@ -127,6 +126,7 @@ class Destek extends Controller
         $ayar         = $destek_model->destek_ayar();
         $mesaj_id     = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
         $alan         = $destek_model->alan($uye_id);
+        $alan_isim    = empty($alan->name) ? $alan->ad : $alan->name;
         if (!empty($dosya)) {
             $isim       = $dosya->getClientOriginalName();
             $size       = round($dosya->getClientSize() / 1000000, 2);
@@ -139,7 +139,7 @@ class Destek extends Controller
             $tel[] = $alan->tel;
             self::smsGonder($_SERVER['SERVER_NAME'] . ' size mesaj gönderdi, sisteme giriş yaparak inceleyebilirsiniz.', $tel, $ayar->sms_user, $ayar->sms_sifre, $ayar->sms_baslik);
         }
-        $mail->mailGonder('mail.destek', 'acarbey15@gmail.com', 'Görülen iSim', 'konu', $konu . '<br>' . $mesaj);
+        $mail->mailGonder('mail.destek', $alan_isim->email, $alan_isim, 'konu', $konu . '<br>' . $mesaj);
 
         return redirect()->to('destek/yeni_mesaj?msg=' . $this->gonderildi);
     }
