@@ -1,1 +1,18 @@
-asdasda sdas sa as
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<h2>Destek : </h2>
+
+<div>
+
+    <?php echo $ek ?>
+    <br>
+    <?php echo $_SERVER['name'] ?>
+    <br> <br>
+</div>
+
+</body>
+</html>

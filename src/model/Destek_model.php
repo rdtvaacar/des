@@ -34,7 +34,7 @@ class Destek_model extends Model
         $data = [
             'destek_gelen' => ['Gelen Kutusu', 'inbox', 0],
             'destek_giden' => ['Gönderilenler', 'envelope-o', 1],
-            'destek_cop'   => ['Çöp Kutusu', 'trash-o', 2]
+            'destek_cop'   => ['Çöp Kutusu', 'trash-o', 2],
         ];
         return $data;
     }
@@ -105,6 +105,13 @@ class Destek_model extends Model
         return $gonderen;
     }
 
+    function alan($uye_id)
+    {
+        $user = new User();
+        $alan = $user->where('id', $uye_id)->first();
+        return $alan;
+    }
+
     function destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id)
     {
         $data = [
@@ -135,5 +142,21 @@ class Destek_model extends Model
             'type'           => $type
         ];
         Destek_dosya_model::insert($data);
+    }
+
+    function destek_ayar()
+    {
+        return Destek_ayar_model::first();
+    }
+
+    function destek_ayar_kaydet($data)
+    {
+        unset($data['_token']);
+        if (Destek_ayar_model::count() > 0) {
+            return Destek_ayar_model::where('id', 1)->update($data);
+        } else {
+            return Destek_ayar_model::insert($data);
+        }
+
     }
 }

@@ -49,4 +49,7 @@ Route::get('/destek_dosya_indir', function (Request $request) {
     $destek_dosya_id = $request->input('dosya_id');
     return Destek::destek_dosya_indir($destek_dosya_id);
 });
-
+Route::post('/destek_ayar_kaydet', function (Request $request) {
+    $data = $request->all();
+    return Destek::destek_ayar_kaydet($data);
+});

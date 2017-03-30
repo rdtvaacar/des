@@ -62,6 +62,11 @@ class Destek extends Controller
             $active = $datum == $tab ? 'class="active"' : '';
             $link   .= '<li ' . $active . ' ><a href="/destek?tab=' . $datum . '"><i class="fa fa-' . $datas[1] . '"></i> ' . $datas[0] . ' ' . $gelen_div . ' </a></li>';
         }
+        if ($tab == 'destek_ayar') {
+            $activeAyar = 'class="active"';
+        } else {
+            $activeAyar = '';
+        }
         return '<div class="col-md-3">
             <a href="/destek/yeni_mesaj" class="btn btn-primary btn-block margin-bottom">Yeni Mesaj Gönder</a>
             <div class="box box-solid">
@@ -75,6 +80,7 @@ class Destek extends Controller
                 <div class="box-body no-padding">
                     <ul class="nav nav-pills nav-stacked">
                     ' . $link . '
+                    <li ' . $activeAyar . '><a href="/destek/destek_ayar?tab=destek_ayar"><i class="fa  fa-gears"></i>  Admin Ayarlar</a></li>
                     </ul>
                 </div>
                 <!-- /.box-body -->
@@ -118,7 +124,9 @@ class Destek extends Controller
         $mail         = new MailController();
         $destek_model = new Destek_model();
         $gon_id       = $this->uye_id();
+        $ayar         = $destek_model->destek_ayar();
         $mesaj_id     = $destek_model->destek_mesaj_kaydet($konu, $mesaj, $uye_id, $gon_id);
+        $alan         = $destek_model->alan($uye_id);
         if (!empty($dosya)) {
             $isim       = $dosya->getClientOriginalName();
             $size       = round($dosya->getClientSize() / 1000000, 2);
@@ -127,7 +135,12 @@ class Destek extends Controller
             $dosya->move(public_path('/uploads'), $dosya_isim);
             $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
         }
-        $mail->mailGonder('mail.destek', 'acarbey15@gmail.com', 'Görülen iSim', 'konu', 'Bu bir destek MEsajı');
+        if (!empty($alan->tel) && $ayar->sms_aktiflik == 1) {
+            $tel[] = $alan->tel;
+            self::smsGonder($_SERVER['SERVER_NAME'] . ' size mesaj gönderdi, sisteme giriş yaparak inceleyebilirsiniz.', $tel, $ayar->sms_user, $ayar->sms_sifre, $ayar->sms_baslik);
+        }
+        $mail->mailGonder('mail.destek', 'acarbey15@gmail.com', 'Görülen iSim', 'konu', $konu . '<br>' . $mesaj);
+
         return redirect()->to('destek/yeni_mesaj?msg=' . $this->gonderildi);
     }
 
@@ -151,5 +164,64 @@ class Destek extends Controller
         } else {
             return 'Dosya mevcut değil.';
         }
+    }
+
+    function destek_ayar_kaydet($data)
+    {
+        $destek_model            = new Destek_model();
+        $data                    = (object)$data;
+        $data->destek_mail       = empty($data->destek_mail) ? '' : $data->destek_mail;
+        $data->sms_user          = empty($data->sms_user) ? '' : $data->sms_user;
+        $data->sms_sifre         = empty($data->sms_sifre) ? '' : $data->sms_sifre;
+        $data->destek_admin_isim = empty($data->destek_admin_isim) ? 'Admin' : $data->destek_admin_isim;
+        $data->sms_aktiflik      = empty($data->sms_aktiflik) ? 0 : $data->sms_aktiflik;
+        $data->sms_baslik        = empty($data->sms_baslik) ? 0 : $data->sms_baslik;
+        $veri                    = [
+            'destek_mail'       => $data->destek_mail,
+            'sms_user'          => $data->sms_user,
+            'sms_sifre'         => $data->sms_sifre,
+            'destek_admin_isim' => $data->destek_admin_isim,
+            'sms_aktiflik'      => $data->sms_aktiflik,
+            'sms_baslik'        => $data->sms_baslik,
+        ];
+        $destek_model->destek_ayar_kaydet($veri);
+        return redirect()->to('destek/destek_ayar?msg=' . $this->basariliGuncelleme);
+    }
+
+    function smsGonder($mesaj, $tel, $user, $password, $baslik)
+    {
+
+        if (empty($mesaj)) {
+
+            $mesaj = self::ingilizceYap(strip_tags(trim(Input::get('mesaj'))));
+        } else {
+            $mesaj = $mesaj;
+        }
+        $telDizi = $tel;
+        array_unique($telDizi);
+        $mesajData['user']      = array(
+            'name' => $user,
+            'pass' => $password
+        );
+        $mesajData['msgBaslik'] = $baslik;
+        $mesajData['msgData'][] = array(
+            'tel' => $telDizi,
+            'msg' => $mesaj,
+        );
+        self::MesajPaneliGonder($mesajData);
+    }
+
+    function MesajPaneliGonder($request)
+    {
+        $request = "data=" . base64_encode(json_encode($request));
+        $ch      = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://api.mesajpaneli.com/json_api/');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return json_decode(base64_decode($result), TRUE);
     }
 }
