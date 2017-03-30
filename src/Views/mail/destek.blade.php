@@ -10,7 +10,7 @@
 
     <?php echo $ek ?>
     <br>
-    <?php echo $_SERVER['name'] ?>
+    <?php echo $_SERVER['SERVER_NAME'] ?>
     <br> <br>
 </div>
 
