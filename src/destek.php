@@ -127,7 +127,7 @@ class Destek extends Controller
             $dosya->move(public_path('/uploads'), $dosya_isim);
             $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
         }
-        $mail->build();
+        $mail->mailGonder('mail.destek', 'acarbey15@gmail.com', 'Görülen iSim', 'konu', 'Bu bir destek MEsajı');
         return redirect()->to('destek/yeni_mesaj?msg=' . $this->gonderildi);
     }
 
