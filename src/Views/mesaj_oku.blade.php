@@ -2,6 +2,7 @@
     <div class="row">
     <?php echo $destek->menu($tab);
     $mesaj = $data->mesaj_oku($mesaj_id);
+    
     ?>
     <!-- /.col -->
         <div class="col-md-9">

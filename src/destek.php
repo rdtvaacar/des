@@ -2,7 +2,6 @@
 
 namespace Acr\Destek;
 
-
 use Acr\Destek\Model\Destek_dosya_model;
 use Acr\Destek\Controllers\Controller;
 use Acr\Destek\Model\Destek_model;
@@ -12,6 +11,7 @@ use Acr\Destek\Controllers\MailController;
 class Destek extends Controller
 {
     protected $basarili           = '<div class="alert alert-success">Başarıyla Eklendi</div>';
+    protected $dosyaBuyuk         = '<div class="alert alert-danger">Yüklemeye çalıştığınız dosyanın boyutu 20 MB\'den büyük</div>';
     protected $gonderildi         = '<div class="alert alert-success">Mesajınız başarıyla gönderildi, en kısa zamanda size yanıt vermeye çalışacağız, teşekkür ederiz.</div>';
     protected $basariliGuncelleme = '<div class="alert alert-success">Başarıyla Güncellendi</div>';
 
@@ -52,14 +52,14 @@ class Destek extends Controller
 
     function menu($tab)
     {
-        $destek_model    = new Destek_model();
-        $data            = $destek_model->tab_menu();
-        $gelen_okunmayan = $destek_model->gelen_okunmayan_sayi();
-        $gelen_div       = $tab == 'inbox' ? '<span class="label label-primary pull-right">' . $gelen_okunmayan . '</span>' : '';
-        $link            = '';
+        $destek_model = new Destek_model();
+        $data         = $destek_model->tab_menu();
+
+        $link = '';
         foreach ($data as $datum => $datas) {
-            $active = $datum == $tab ? 'class="active"' : '';
-            $link   .= '<li ' . $active . ' ><a href="/destek?tab=' . $datum . '"><i class="fa fa-' . $datas[1] . '"></i> ' . $datas[0] . ' ' . $gelen_div . ' </a></li>';
+            $okunmayan = '<span style="color: red;">' . $destek_model->gelen_okunmayan_sayi($datas[2]) . '</span>';
+            $active    = $datum == $tab ? 'class="active"' : '';
+            $link      .= '<li ' . $active . ' ><a href="/destek?tab=' . $datum . '"><i class="fa fa-' . $datas[1] . '"></i> ' . $datas[0] . ' ' . $okunmayan . ' </a></li>';
         }
         if ($tab == 'destek_ayar') {
             $activeAyar = 'class="active"';
@@ -89,12 +89,14 @@ class Destek extends Controller
 
     function destek_satir($item, $tab)
     {
-        $item->name = empty($item->name) ? $item->ad : $item->name;
-        $veri       =
+        $okunduStyle = $item->okundu == 1 ? 'style="color:#B0C4DE"' : '';
+        $konu        = $item->okundu == 1 ? $item->konu : '<b>' . $item->konu . '</b>';
+        $item->name  = empty($item->name) ? $item->ad : $item->name;
+        $veri        =
             '<tr id="destek_satir_' . $item->destek_users_id . '">
                    <td><input id="destek_id[]" name="destek_id[]" value="' . $item->destek_users_id . '"  type="checkbox"></td>
-                   <td class="mailbox-name"><a href="/destek/mesaj_oku?mesaj_id=' . $item->destek_users_id . '&tab=' . $tab . '">' . $item->name . '</a></td>
-                   <td class="mailbox-subject"><b>' . $item->konu . '</b></td>
+                   <td class="mailbox-name"><a ' . $okunduStyle . ' href="/destek/mesaj_oku?mesaj_id=' . $item->destek_users_id . '&tab=' . $tab . '">' . $item->name . '</a></td>
+                   <td class="mailbox-subject">' . $konu . '</td>
                    <td class="mailbox-attachment"></td>
                    <td align="right" class="mailbox-date">' . $item->d_cd . '</td>
              </tr>';
@@ -133,7 +135,11 @@ class Destek extends Controller
             $type       = strtolower($dosya->getClientOriginalExtension());
             $dosya_isim = self::ingilizceYap($isim);
             $dosya->move(public_path('/uploads'), $dosya_isim);
-            $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
+            if ($size < 21) {
+                $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
+            } else {
+                return redirect()->to('destek/yeni_mesaj?msg=' . $this->dosyaBuyuk);;
+            }
         }
         if (!empty($alan->tel) && $ayar->sms_aktiflik == 1) {
             $tel[] = $alan->tel;
@@ -224,4 +230,5 @@ class Destek extends Controller
         curl_close($ch);
         return json_decode(base64_decode($result), TRUE);
     }
+
 }

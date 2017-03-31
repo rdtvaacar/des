@@ -96,4 +96,11 @@
     function yenile() {
         location.reload();
     }
+    $('#mesaj_buton').on('click', function () {
+        var $btn = $(this).addClass('disabled');
+        // business logic...
+        $btn.button('reset')
+    })
+
+
 </script>

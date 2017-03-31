@@ -46,7 +46,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <div class="pull-right">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Gönder</button>
+                            <button type="submit" id="myButton" data-loading-text="Loading..." id="gonder" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Gönder</button>
                         </div>
                         <a href="/destek" type="reset" class="btn btn-default"><i class="fa fa-times"></i> Vazgeç</a>
                     </div>

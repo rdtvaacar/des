@@ -48,9 +48,9 @@ class Destek_model extends Model
         }
     }
 
-    function gelen_okunmayan_sayi()
+    function gelen_okunmayan_sayi($tur)
     {
-        return 0;
+        return Destek_users_model::where('destek_users.uye_id', $this->uye_id())->where('okundu', 0)->where('tur', $tur)->where('sil', 0)->count();
     }
 
     function mesajlar($tab, $sil)
@@ -69,6 +69,7 @@ class Destek_model extends Model
 
     function mesaj_oku($mesaj_id)
     {
+        Destek_users_model::where('uye_id', $this->uye_id())->where('id', $mesaj_id)->update(['okundu' => 1]);
         return Destek_users_model::leftJoin('destek', 'destek_users.mesaj_id', '=', 'destek.id')
             ->leftJoin('users', 'users.id', '=', 'destek_users.gon_id')
             ->leftJoin('destek_dosya', 'destek_dosya.mesaj_id', '=', 'destek_users.mesaj_id')
@@ -132,6 +133,7 @@ class Destek_model extends Model
 
     function destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim)
     {
+
         $data = [
             'dosya_org_isim' => $isim,
             'dosya_isim'     => $dosya_isim,
@@ -142,6 +144,7 @@ class Destek_model extends Model
             'type'           => $type
         ];
         Destek_dosya_model::insert($data);
+
     }
 
     function destek_ayar()
