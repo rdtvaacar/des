@@ -57,7 +57,7 @@ class Destek extends Controller
 
         $link = '';
         foreach ($data as $datum => $datas) {
-            $okunmayan = '<span style="color: red;">' . $destek_model->gelen_okunmayan_sayi($datas[2]) . '</span>';
+            $okunmayan = $destek_model->gelen_okunmayan_sayi($datas[2]) == 0 ? '' : '<span style="color: red;">' . $destek_model->gelen_okunmayan_sayi($datas[2]) . '</span>';
             $active    = $datum == $tab ? 'class="active"' : '';
             $link      .= '<li ' . $active . ' ><a href="/destek?tab=' . $datum . '"><i class="fa fa-' . $datas[1] . '"></i> ' . $datas[0] . ' ' . $okunmayan . ' </a></li>';
         }
