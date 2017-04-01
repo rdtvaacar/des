@@ -20,13 +20,7 @@ class Destek_model extends Model
 
     function uye_id()
     {
-        if (Auth::check()) {
-            return $this->uye_id = Auth::user()->id;
-
-        } else {
-            return $this->uye_id = 0;
-        }
-
+        return $this->uye_id = Auth::user()->id;
     }
 
     function tab_menu()
@@ -41,11 +35,7 @@ class Destek_model extends Model
 
     function kurum_id()
     {
-        if (Auth::check()) {
-            return $this->kurum_id = Auth::user()->kurum_id;
-        } else {
-            return $this->kurum_id = 0;
-        }
+        return $this->kurum_id = Auth::user()->kurum_id;
     }
 
     function gelen_okunmayan_sayi($tur)

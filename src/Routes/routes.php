@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Http\Request;
-
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/destek/{sayfa}/{yer}', function (Request $request, $sayfa, $yer) {
         $tab      = $request->input('tab');
