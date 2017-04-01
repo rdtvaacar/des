@@ -1,6 +1,15 @@
 <?php
 use Illuminate\Http\Request;
 
+Route::get('/destek/{sayfa}/', function (Request $request, $sayfa) {
+    $tab      = $request->input('tab');
+    $mesaj_id = $request->input('mesaj_id');
+    $sayfa    = empty($sayfa) ? 'anasayfa' : $sayfa;
+    $msg      = $request->input('msg');
+
+    return Destek::index($sayfa, null, $tab, $mesaj_id, $msg);
+})->middleware('auth');
+
 Route::group(['middleware' => ['web']], function () {
     Route::get('/destek/{sayfa}/{yer}', function (Request $request, $sayfa, $yer) {
         $tab      = $request->input('tab');
@@ -10,13 +19,7 @@ Route::group(['middleware' => ['web']], function () {
         $msg      = $request->input('msg');
         return Destek::index($sayfa, $yer, $tab, $mesaj_id, $msg);
     });
-    Route::get('/destek/{sayfa}/', function (Request $request, $sayfa) {
-        $tab      = $request->input('tab');
-        $mesaj_id = $request->input('mesaj_id');
-        $sayfa    = empty($sayfa) ? 'anasayfa' : $sayfa;
-        $msg      = $request->input('msg');
-        return Destek::index($sayfa, null, $tab, $mesaj_id, $msg);
-    });
+
     Route::get('/destek', function (Request $request) {
         $tab      = $request->input('tab');
         $sayfa    = 'anasayfa';
