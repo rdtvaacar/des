@@ -136,7 +136,7 @@ class Destek extends Controller
             $isim       = $dosya->getClientOriginalName();
             $size       = round($dosya->getClientSize() / 1000000, 2);
             $type       = strtolower($dosya->getClientOriginalExtension());
-            $dosya_isim = self::ingilizceYap($isim);
+            $dosya_isim = str_replace('.' . $type, '', self::ingilizceYap($isim));
             $dosya->move(public_path('/uploads'), $dosya_isim);
             if ($size < 21 && $size > 0) {
                 $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
