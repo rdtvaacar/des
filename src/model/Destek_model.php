@@ -100,7 +100,6 @@ class Destek_model extends Model
             }
         }
         Destek_dosya_model::where('mesaj_id', $mesaj_id)->delete();
-
     }
 
     function sil($destek_id)
