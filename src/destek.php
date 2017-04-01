@@ -54,7 +54,7 @@ class Destek extends Controller
     {
         $destek_model = new Destek_model();
         $data         = $destek_model->tab_menu();
-        $link = '';
+        $link         = '';
         foreach ($data as $datum => $datas) {
             $okunmayan = $destek_model->gelen_okunmayan_sayi($datas[2]) == 0 ? '' : '<span style="color: red;">' . $destek_model->gelen_okunmayan_sayi($datas[2]) . '</span>';
             $active    = $datum == $tab ? 'class="active"' : '';
@@ -158,9 +158,8 @@ class Destek extends Controller
         $destek_dosya_model = new Destek_dosya_model();
         $dosyaSorgu         = $destek_dosya_model->where('id', $destek_dosya_id);
         $dosya_sayi         = $dosyaSorgu->count();
-        $dosya              = $dosyaSorgu->first();
-
         if ($dosya_sayi > 0) {
+            $dosya   = $dosyaSorgu->first();
             $izinler = [
                 $dosya->uye_id, $dosya->gon_id
             ];
