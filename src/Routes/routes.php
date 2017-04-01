@@ -17,7 +17,7 @@ Route::group(['middleware' => ['auth']], function () {
         $msg      = $request->input('msg');
 
         return Destek::index($sayfa, null, $tab, $mesaj_id, $msg);
-    })->middleware('auth');
+    });
     Route::get('/destek', function (Request $request) {
         $tab      = $request->input('tab');
         $sayfa    = 'anasayfa';
@@ -27,7 +27,6 @@ Route::group(['middleware' => ['auth']], function () {
         return Destek::index($sayfa, null, $tab, $mesaj_id, $msg);
 
     });
-
     Route::post('/destek_sec_sil', function (Request $request) {
         $destek_id = $request->input('destek_id');
         $tab       = $request->input('tab');
@@ -46,7 +45,6 @@ Route::group(['middleware' => ['auth']], function () {
         $uye_id = $request->input('uye_id');
         return Destek::destek_mesaj_kaydet($konu, $mesaj, $dosya, $uye_id);
     });
-
     Route::get('/destek_dosya_indir', function (Request $request) {
         $destek_dosya_id = $request->input('dosya_id');
         return Destek::destek_dosya_indir($destek_dosya_id);
