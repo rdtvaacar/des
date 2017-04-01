@@ -99,6 +99,7 @@ class Destek_model extends Model
                 unlink('/uploads/' . $item->dosya_isim);
             }
         }
+        Destek_dosya_model::where('mesaj_id', $mesaj_id)->delete();
 
     }
 
