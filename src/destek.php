@@ -148,7 +148,7 @@ class Destek extends Controller
             $tel[] = $alan->tel;
             self::smsGonder($_SERVER['SERVER_NAME'] . ' size mesaj gönderdi, sisteme giriş yaparak inceleyebilirsiniz.', $tel, $ayar->sms_user, $ayar->sms_sifre, $ayar->sms_baslik);
         }
-        $mail->mailGonder('mail.destek', $alan_isim->email, $alan_isim, 'konu', $konu . '<br>' . $mesaj);
+        $mail->mailGonder('mail.destek', $alan->email, $alan_isim, 'konu', $konu . '<br>' . $mesaj);
 
         return redirect()->to('destek/yeni_mesaj?msg=' . $this->gonderildi);
     }
