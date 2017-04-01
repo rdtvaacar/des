@@ -66,6 +66,15 @@ class Destek extends Controller
         } else {
             $activeAyar = '';
         }
+        if (Auth::check()) {
+            if (Auth::user()->id == 1) {
+                $admin_ayar = '<li ' . $activeAyar . '><a href="/destek/destek_ayar?tab=destek_ayar"><i class="fa  fa-gears"></i>  Admin Ayarlar</a></li>';
+            } else {
+                $admin_ayar = '';
+            }
+        } else {
+            $admin_ayar = '';
+        }
         return '<div class="col-md-3">
             <a href="/destek/yeni_mesaj" class="btn btn-primary btn-block margin-bottom">Yeni Mesaj Gönder</a>
             <div class="box box-solid">
@@ -78,8 +87,7 @@ class Destek extends Controller
                 </div>
                 <div class="box-body no-padding">
                     <ul class="nav nav-pills nav-stacked">
-                    ' . $link . '
-                    <li ' . $activeAyar . '><a href="/destek/destek_ayar?tab=destek_ayar"><i class="fa  fa-gears"></i>  Admin Ayarlar</a></li>
+                    ' . $link . $admin_ayar . '
                     </ul>
                 </div>
                 <!-- /.box-body -->
@@ -135,7 +143,7 @@ class Destek extends Controller
             $type       = strtolower($dosya->getClientOriginalExtension());
             $dosya_isim = self::ingilizceYap($isim);
             $dosya->move(public_path('/uploads'), $dosya_isim);
-            if ($size < 21) {
+            if ($size < 21 && $size > 0) {
                 $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
             } else {
                 return redirect()->to('destek/yeni_mesaj?msg=' . $this->dosyaBuyuk);;
