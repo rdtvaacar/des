@@ -6,6 +6,7 @@ use Acr\Destek\Model\Destek_dosya_model;
 use Acr\Destek\Controllers\Controller;
 use Acr\Destek\Model\Destek_model;
 use Acr\Destek\Controllers\MailController;
+use Auth;
 
 
 class Destek extends Controller
