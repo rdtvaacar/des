@@ -32,7 +32,6 @@
                         <div class="form-group">
                             <input name="destek_admin_isim" id="destek_admin_isim" class="form-control" placeholder="Gönderen" value="<?php echo $ayar->destek_admin_isim ?>">
                         </div>
-
                         <div class="form-group">
                             <input <?php echo $ayar->sms_aktiflik == 1 ? 'checked="checked"' : '';?> name="sms_aktiflik" id="sms_aktiflik" type="checkbox" value="1"/> <label for="sms_aktiflik">SMS Gönderimi Aktif</label>
                         </div>

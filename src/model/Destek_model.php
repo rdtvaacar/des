@@ -79,9 +79,35 @@ class Destek_model extends Model
             ->first();
     }
 
+    function dosyalar($mesaj_id)
+    {
+        $dosyaSorgu = Destek_dosya_model::where('mesaj_id', $mesaj_id);
+        $dosya_sayi = $dosyaSorgu->count();
+        if ($dosya_sayi > 0) {
+            return $dosya = $dosyaSorgu->get();
+        } else {
+            $dosya = [];
+            return (object)$dosya;
+        }
+    }
+
+    function tum_dosya_sil($mesaj_id)
+    {
+        $dosyalar = self::dosyalar($mesaj_id);
+        foreach ($dosyalar as $item) {
+            if (file_exists('/uploads/' . $item->dosya_isim)) {
+                unlink('/uploads/' . $item->dosya_isim);
+            }
+        }
+
+    }
+
     function sil($destek_id)
     {
-        Destek_users_model::where('uye_id', $this->uye_id())->whereIn('id', $destek_id)->update(['tur' => 2, 'sil' => 1]);
+        $destek_user_sorgu = Destek_users_model::where('uye_id', $this->uye_id())->whereIn('id', $destek_id);
+        $destek_user_sorgu->update(['tur' => 2, 'sil' => 1]);
+        $destek_user_satir = $destek_user_sorgu->first();
+        self::tum_dosya_sil($destek_user_satir->mesaj_id);
     }
 
     function cope_tasi($destek_id)

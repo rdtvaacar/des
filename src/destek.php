@@ -136,7 +136,7 @@ class Destek extends Controller
             $size       = round($dosya->getClientSize() / 1000000, 2);
             $type       = strtolower($dosya->getClientOriginalExtension());
             $isim       = str_replace('.' . $type, '', $dosya->getClientOriginalName());
-            $dosya_isim = self::ingilizceYap($isim);
+            $dosya_isim = self::ingilizceYap($isim) . '.' . $type;
             $dosya->move(public_path('/uploads'), $dosya_isim);
             if ($size < 21 && $size > 0) {
                 $destek_model->destek_dosya_kaydet($mesaj_id, $dosya_isim, $uye_id, $gon_id, $size, $type, $isim);
@@ -148,7 +148,7 @@ class Destek extends Controller
             $tel[] = $alan->tel;
             self::smsGonder($_SERVER['SERVER_NAME'] . ' size mesaj gönderdi, sisteme giriş yaparak inceleyebilirsiniz.', $tel, $ayar->sms_user, $ayar->sms_sifre, $ayar->sms_baslik);
         }
-        $mail->mailGonder('mail.destek', $alan->email, $alan_isim, 'konu', $konu . '<br>' . $mesaj);
+        $mail->mailGonder('mail.destek', $alan->email, $alan_isim, $konu . '<br>' . $mesaj);
 
         return redirect()->to('destek/yeni_mesaj?msg=' . $this->gonderildi);
     }
