@@ -6,7 +6,6 @@ use Acr\Destek\Model\Destek_dosya_model;
 use Acr\Destek\Controllers\Controller;
 use Acr\Destek\Model\Destek_model;
 use Acr\Destek\Controllers\MailController;
-use Auth;
 
 
 class Destek extends Controller
@@ -55,7 +54,6 @@ class Destek extends Controller
     {
         $destek_model = new Destek_model();
         $data         = $destek_model->tab_menu();
-
         $link = '';
         foreach ($data as $datum => $datas) {
             $okunmayan = $destek_model->gelen_okunmayan_sayi($datas[2]) == 0 ? '' : '<span style="color: red;">' . $destek_model->gelen_okunmayan_sayi($datas[2]) . '</span>';
@@ -67,12 +65,8 @@ class Destek extends Controller
         } else {
             $activeAyar = '';
         }
-        if (Auth::check()) {
-            if (Auth::user()->id == 1) {
-                $admin_ayar = '<li ' . $activeAyar . '><a href="/destek/destek_ayar?tab=destek_ayar"><i class="fa  fa-gears"></i>  Admin Ayarlar</a></li>';
-            } else {
-                $admin_ayar = '';
-            }
+        if ($this->uye_id() == 1) {
+            $admin_ayar = '<li ' . $activeAyar . '><a href="/destek/destek_ayar?tab=destek_ayar"><i class="fa  fa-gears"></i>  Admin Ayarlar</a></li>';
         } else {
             $admin_ayar = '';
         }
