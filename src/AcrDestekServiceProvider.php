@@ -16,9 +16,6 @@ class AcrDestekServiceProvider extends ServiceProvider
     {
 
         $this->loadViewsFrom(__DIR__ . '/Views', 'acr_destek');
-        $this->publishes([
-            __DIR__ . '/../config/destek_config.php.php' => config_path('destek_config.php'),
-        ]);
         $this->loadRoutesFrom(__DIR__ . '/Routes/routes.php');
     }
 
