@@ -3,7 +3,7 @@
 namespace Acr\Destek;
 
 use Illuminate\Support\ServiceProvider;
-
+use Acr\Destek\Destek;
 
 class AcrDestekServiceProvider extends ServiceProvider
 {
@@ -27,7 +27,7 @@ class AcrDestekServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('acr-destek', function () {
-            return new destek();
+            return new Destek();
         });
     }
 
