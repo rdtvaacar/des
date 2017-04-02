@@ -29,9 +29,6 @@ class AcrDestekServiceProvider extends ServiceProvider
         $this->app->bind('acr-destek', function () {
             return new destek();
         });
-        config([
-            '/../config/destek_config.php',
-        ]);
     }
 
 }
