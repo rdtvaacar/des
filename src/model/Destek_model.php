@@ -20,7 +20,13 @@ class Destek_model extends Model
 
     function uye_id()
     {
-        return $this->uye_id = Auth::user()->id;
+        if (Auth::check()) {
+            return $this->uye_id = Auth::user()->id;
+
+        } else {
+            return $this->uye_id = 0;
+        }
+
     }
 
     function tab_menu()
@@ -35,7 +41,11 @@ class Destek_model extends Model
 
     function kurum_id()
     {
-        return $this->kurum_id = Auth::user()->kurum_id;
+        if (Auth::check()) {
+            return $this->kurum_id = Auth::user()->kurum_id;
+        } else {
+            return $this->kurum_id = 0;
+        }
     }
 
     function gelen_okunmayan_sayi($tur)
@@ -90,6 +100,7 @@ class Destek_model extends Model
             }
         }
         Destek_dosya_model::where('mesaj_id', $mesaj_id)->delete();
+
     }
 
     function sil($destek_id)

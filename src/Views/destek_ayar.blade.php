@@ -3,6 +3,8 @@
     <div class="row">
     <?php echo $destek->menu($tab);
     $ayar = $data->destek_ayar();
+    if (Auth::check()) {
+    if (Auth::user()->id == 1) {
     ?>
 
     <!-- /.col -->
@@ -50,3 +52,6 @@
     </div>
     <!-- /.row -->
 </section>
+<?php
+}
+} ?>

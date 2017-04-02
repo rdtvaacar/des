@@ -3,7 +3,7 @@
 namespace Acr\Destek;
 
 use Illuminate\Support\ServiceProvider;
-use Acr\Destek\Destek;
+
 
 class AcrDestekServiceProvider extends ServiceProvider
 {
@@ -14,7 +14,11 @@ class AcrDestekServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $this->loadViewsFrom(__DIR__ . '/Views', 'acr_destek');
+        $this->publishes([
+            __DIR__ . '/../config/destek_config.php.php' => config_path('destek_config.php'),
+        ]);
         require __DIR__ . '/Routes/routes.php';
     }
 
@@ -26,8 +30,11 @@ class AcrDestekServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('acr-destek', function () {
-            return new Destek();
+            return new destek();
         });
+        config([
+            '/../config/destek_config.php',
+        ]);
     }
 
 }
