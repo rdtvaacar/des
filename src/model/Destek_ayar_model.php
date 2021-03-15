@@ -3,7 +3,7 @@
 namespace Acr\Destek\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
+use App\Models\User;
 use Auth;
 
 class Destek_ayar_model extends Model
